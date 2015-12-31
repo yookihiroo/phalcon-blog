@@ -41,7 +41,7 @@ $app = function() {
     $application = new \Phalcon\Mvc\Application($di);
     if (DEBUG) {
         $di['app'] = $application;
-        (new Snowair\Debugbar\ServiceProvider())->start();
+        (new Snowair\Debugbar\ServiceProvider('debugbar'))->start();
     }
     echo $application->handle()->getContent();
 };
