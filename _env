@@ -1,0 +1,4 @@
+# rename ".env"
+# environment variables here
+APP_ENV=dev
+DEBUG=false
