@@ -4,8 +4,19 @@ error_reporting(E_ALL);
 
 define('APP_PATH', realpath('..'));
 
-try {
+define('DEBUG', true);
+require(APP_PATH. '/vendor/autoload.php');
+if (DEBUG) {
+    set_error_handler(
+        function ($errno, $errstr, $errfile, $errline) {
+            throw new ErrorException($errstr, $errno, 0, $errfile, $errline);
+        }
+    );
+    $debug = new \Phalcon\Debug();
+    $debug->listen();
+}
 
+$app = function() {
     /**
      * Read the configuration
      */
@@ -25,10 +36,20 @@ try {
      * Handle the request
      */
     $application = new \Phalcon\Mvc\Application($di);
-
+    if (DEBUG) {
+        $di['app'] = $application;
+        (new Snowair\Debugbar\ServiceProvider())->start();
+    }
     echo $application->handle()->getContent();
+};
 
-} catch (\Exception $e) {
-    echo $e->getMessage() . '<br>';
-    echo '<pre>' . $e->getTraceAsString() . '</pre>';
+if (DEBUG) {
+    $app();
+} else {
+    try {
+        $app();
+    }  catch (\Exception $e) {
+        echo $e->getMessage() . '<br>';
+        echo '<pre>' . $e->getTraceAsString() . '</pre>';
+    }
 }

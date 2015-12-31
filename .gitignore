@@ -1,2 +1,5 @@
 /app/cache/*
 !app/cache/.gitkeep
+/vendor/*
+*.log
+/Runtime/*
