@@ -4,8 +4,11 @@ error_reporting(E_ALL);
 
 define('APP_PATH', realpath('..'));
 
-define('DEBUG', true);
 require(APP_PATH. '/vendor/autoload.php');
+$dotenv = new Dotenv\Dotenv(APP_PATH);
+$dotenv->load();
+
+define('DEBUG', getenv('DEBUG'));
 if (DEBUG) {
     set_error_handler(
         function ($errno, $errstr, $errfile, $errline) {
